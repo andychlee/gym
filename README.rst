@@ -173,18 +173,6 @@ The Atari environments are a variety of Atari video games. If you didn't do the 
 
 This will install ``atari-py``, which automatically compiles the `Arcade Learning Environment <http://www.arcadelearningenvironment.org/>`_. This can take quite a while (a few minutes on a decent laptop), so just be prepared.
 
-Board games
------------
-
-The board game environments are a variety of board games. If you didn't do the full install, you can install dependencies via ``pip install -e '.[board_game]'`` (you'll need ``cmake`` installed) and then get started as follow:
-
-.. code:: python
-
-	  import gym
-	  env = gym.make('Go9x9-v0')
-	  env.reset()
-	  env.render()
-
 Box2d
 -----------
 
@@ -261,6 +249,21 @@ We are using `pytest <http://doc.pytest.org>`_ for tests. You can run them via:
 What's new
 ==========
 
+- 2018-01-25: Made some aesthetic improvements and removed unmaintained parts of gym. This may seem like a downgrade in functionality, but it is actually a long-needed cleanup in preparation for some great new things that will be released in the next month.
+
+    + Now your `Env` and `Wrapper` subclasses should define `step`, `reset`, `render`, `close`, `seed` rather than underscored method names.
+    + Removed the `board_game`, `debugging`, `safety`, `parameter_tuning` environments since they're not being maintained by us at OpenAI. We encourage authors and users to create new repositories for these environments.
+    + Changed `MultiDiscrete` action space to range from `[0, ..., n-1]` rather than `[a, ..., b-1]`.
+    + No more `render(close=True)`, use env-specific methods to close the rendering.
+    + Removed `scoreboard` directory, since site doesn't exist anymore.
+    + Moved `gym/monitoring` to `gym/wrappers/monitoring`
+    + Add `dtype` to `Space`.
+    + Not using python's built-in module anymore, using `gym.logger`
+
+- 2018-01-24: All continuous control environments now use mujoco_py >= 1.50.
+  Versions have been updated accordingly to -v2, e.g. HalfCheetah-v2. Performance
+  should be similar (see https://github.com/openai/gym/pull/834) but there are likely
+  some differences due to changes in MuJoCo.
 - 2017-06-16: Make env.spec into a property to fix a bug that occurs
   when you try to print out an unregistered Env.
 - 2017-05-13: BACKWARDS INCOMPATIBILITY: The Atari environments are now at
